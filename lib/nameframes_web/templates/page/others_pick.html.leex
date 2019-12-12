@@ -1,0 +1,13 @@
+Select a card that matches the clue the storyteller gave. When done, tap ready.
+
+
+<%= if assigns[:select] do %>
+    <div>Current Selection: <%= @select %></div>
+<% end %>
+
+<%= for card <- @hand do %>
+   <div style="margin-bottom: 16px;">
+    <div><img src="/images/_<%= card %>.jpg"  style="width: 233px; height: 350px; object-fit: cover;"/></div>
+    <button phx-click="others_pick" phx-value-card=<%= card %> >Select</button>
+    </div>  
+<% end %>

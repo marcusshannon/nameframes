@@ -1,0 +1,46 @@
+<h1>Results</h1>
+
+<div>Selected Cards:</div>
+<br/>
+<%= for card <- @picks do %>
+   <div style="margin-bottom: 20px">
+    <%= if @picks_to_player[card] == @storyteller_id do %>
+     STORYTELLER'S CARD
+    <% end %>
+
+    <div>Player: <%= @game.players[@picks_to_player[card]].name %></div>
+    <div>Their card:</div>
+    <img src="/images/_<%= card %>.jpg"  style="width: 233px; height: 350px; object-fit: cover;"/>
+
+    <div>Players who guessed this card:</div>
+
+    <%= if @card_to_user_guess[card] do %>
+    <%= for user_id <- @card_to_user_guess[card] do %>
+        <div><%= @game.players[user_id].name %></div>
+    
+    <% end %>
+    <% else %>
+    <div>Nobody!</div>
+
+    <% end %>
+
+    </div>  
+<% end %>
+
+
+<h1>Leaderboard</h1>
+<%= for {user_id, points} <- @leaderboard do %>
+    <div style="margin-bottom: 16px;">
+    <div><%= @game.players[user_id].name %>: <%= @game.players[user_id].points %></div>
+    </div>
+<% end %>
+
+
+
+<div>
+<button phx-click="ready">Ready up</button
+</div>
+
+<%= if assigns[:ready] do %>
+    Ready!
+<% end %>

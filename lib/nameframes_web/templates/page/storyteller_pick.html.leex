@@ -1,0 +1,8 @@
+Select a card and say a clue for that card. When done, tap continue.
+
+<%= for card <- @hand do %>
+   <div style="margin-bottom: 16px;">
+    <div><img src="/images/_<%= card %>.jpg"  style="width: 233px; height: 350px; object-fit: cover;"/></div>
+    <button phx-click="storyteller_pick" phx-value-card=<%= card %> >Select</button>
+    </div>  
+<% end %>

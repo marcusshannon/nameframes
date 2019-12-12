@@ -1,0 +1,12 @@
+Select the card you think you think is the storyteller's
+
+<%= for card <- @picks do %>
+   <div style="margin-bottom: 16px">
+    <div><img src="/images/_<%= card %>.jpg"  style="width: 233px; height: 350px; object-fit: cover;"/></div>
+
+
+    <%= if @pick != card do %>
+    <button phx-click="others_guess" phx-value-card=<%= card %> >Select</button>
+    <% end %>
+    </div>  
+<% end %>
