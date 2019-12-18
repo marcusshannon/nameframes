@@ -1,0 +1,79 @@
+<%= if @is_storyteller do %>
+<h1>Storyteller (you)</h1>
+<h3>+<%= @game.players[@storyteller_id].round_points %>pts</h3>
+<div style="border: 1px solid; margin-bottom: 16px">
+<img src="/images/_<%= @storyteller_card %>.jpg"  style="width: 233px; height: 350px; object-fit: cover;"/>
+<h3>Players who guessed this card:</h3>
+<%= for guesser <- @storyteller_guesses do %>
+  <div><%= guesser.name %></div>
+<% end %>
+</div>
+<% end %>
+
+<%= if not @is_storyteller do %>
+  <div style="border: 1px solid; margin-bottom: 16px">
+<h1>Storyteller</h1>
+<h2><%= @storyteller_name %></h2>
+<h3>+<%= @game.players[@storyteller_id].round_points %>pts</h3>
+<img src="/images/_<%= @storyteller_card %>.jpg"  style="width: 233px; height: 350px; object-fit: cover;"/>
+<h3>Players who guessed this card:</h3>
+<%= for guesser <- @storyteller_guesses do %>
+  <div><%= guesser.name %></div>
+<% end %>
+</div>
+<% end %>
+
+<%= if not @is_storyteller do %>
+  <div style="border: 1px solid; margin-bottom: 16px">
+  <h1>You</h1>
+  <h3>+<%= @game.players[@player_id].round_points %>pts</h3>
+  <img src="/images/_<%= @pick %>.jpg"  style="width: 233px; height: 350px; object-fit: cover;"/>
+  <h3>Players who guessed this card:</h3>
+  <%= for guesser <- @player_guesses do %>
+    <div><%= guesser.name %></div>
+  <% end %>
+  </div>
+<% end %>
+
+<h1>Others' cards</h1>
+<%= for other <- @display_others do %>
+  <div style="border: 1px solid; margin-bottom: 16px">
+  <h2><%= other.name %></h2>
+  <h3>+<%= other.round_points %>pts</h3>
+  <div style="margin-bottom: 16px;">
+    <img src="/images/_<%= other.pick %>.jpg"  style="width: 233px; height: 350px; object-fit: cover;"/>
+  </div> 
+  <h3>Players who guessed this card:</h3>
+  <%= for guesser <- other.guess_list do %>
+    <div><%= guesser.name %></div>
+  <% end %>
+  </div>
+<% end %>
+
+<div>
+<h1>Leaderboard</h1>
+
+<table>
+  <tr>
+    <th>Player</th>
+    <th>Points</th>
+  </tr>
+<%= for {player_name, points} <- @leaderboard do %>
+  <tr>
+    <td><%= player_name %></td>
+    <td><%= points %></td> 
+  </tr>
+<% end %>
+
+</table>
+
+
+<%= if not @is_ready do %>
+<div>
+<button phx-click="ready">Ready up</button
+</div>
+<% end %>
+
+<%= if @is_ready do %>
+<p>Wait for others to ready up</p>
+<% end %>

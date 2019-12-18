@@ -1,13 +1,7 @@
-<h1>Lobby</h1>
-<h2>Game ID: <%= @game_id %></h2>
-<h2>current state: <%= @current_state %></h2>
-<div>Players:</div>
-<%= for name <- @names do %>
-    <div>
-     <%= name %>
-    </div>
+<% if @view === :lobby_small do %>
+    <%= live_component @socket, NameframesWeb.LobbySmallComponent, Enum.to_list(assigns) %>
 <% end %>
 
-<%= if @game.host == @user_id do %>
-    <button phx-click="start">Start game</button>
+<% if @view === :lobby do %>
+    <%= live_component @socket, NameframesWeb.LobbyComponent, Enum.to_list(assigns) %>
 <% end %>

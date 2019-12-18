@@ -1,10 +1,10 @@
 <h1>Join Game</h1>
 <%= form_for @changeset, "/games/join", fn f -> %>
-  <%= label f, :name do %>
+  <%= label f, :player_name do %>
     Player name
   <% end %>
-  <%= text_input f, :name %>
-  <%= error_tag f, :name %>
+  <%= text_input f, :player_name %>
+  <%= error_tag f, :player_name %>
 
   <%= label f, :game_id %>
   <%= text_input f, :game_id %>

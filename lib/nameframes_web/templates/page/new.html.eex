@@ -1,9 +1,9 @@
 <h1>New Game</h1>
 <%= form_for @changeset, "/games/create", fn f -> %>
-  <%= label f, :name do %>
-    Player name
+  <%= label f, :player_name do %>
+    Player name 
   <% end %>
-  <%= text_input f, :name %>
-  <%= error_tag f, :name %>
+  <%= text_input f, :player_name %>
+  <%= error_tag f, :player_name %>
   <%= submit "Start Game" %>
-<% end %>
+<% end %>`

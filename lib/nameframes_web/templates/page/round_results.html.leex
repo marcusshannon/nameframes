@@ -29,7 +29,7 @@
 
 
 <h1>Leaderboard</h1>
-<%= for {user_id, points} <- @leaderboard do %>
+<%= for {user_id, _points} <- @leaderboard do %>
     <div style="margin-bottom: 16px;">
     <div><%= @game.players[user_id].name %>: <%= @game.players[user_id].points %></div>
     </div>

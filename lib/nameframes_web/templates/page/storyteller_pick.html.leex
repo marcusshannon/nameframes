@@ -1,8 +1,21 @@
-Select a card and say a clue for that card. When done, tap continue.
+<%= if @is_storyteller do %>
+  <h1>You are the storyteller</h1>
+  <p>Think of a clue for one of your cards that is not too specific and not too abstract.</p>
+  <p>Give the clue and select the card.</p>
+<% else %>
+  <p>Wait for the storyteller to give a clue then select a card that matches their clue.</p>
+<% end %>
 
+<h1>Your hand</h1>
 <%= for card <- @hand do %>
-   <div style="margin-bottom: 16px;">
-    <div><img src="/images/_<%= card %>.jpg"  style="width: 233px; height: 350px; object-fit: cover;"/></div>
-    <button phx-click="storyteller_pick" phx-value-card=<%= card %> >Select</button>
-    </div>  
+  <div style="margin-bottom: 16px;">
+    <div>
+      <img src="/images/_<%= card %>.jpg"  style="width: 233px; height: 350px; object-fit: cover;"/>
+    </div>
+    <%= if @is_storyteller do %>
+      <button phx-click="pick" phx-value-card=<%= card %> >
+        Select
+      </button>
+    <% end %>
+  </div>  
 <% end %>

@@ -1,5 +1,5 @@
-defmodule Nameframes.Games do
-  alias Nameframes.Games.{CreateGame, JoinGame}
+defmodule Nameframes.Forms do
+  alias Nameframes.Forms.{CreateGame, JoinGame}
 
   def change_create_game(%CreateGame{} = create_game) do
     CreateGame.changeset(create_game, %{})

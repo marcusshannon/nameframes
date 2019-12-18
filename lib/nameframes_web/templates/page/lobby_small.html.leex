@@ -1,0 +1,11 @@
+<h1>Game Lobby</h1>
+<h2>Game id: <%= @game_id %>
+
+<h2>Players:</h2>
+<%= for player_name <- @player_names do %>
+    <div><%= player_name %></div>
+<% end %>
+
+<h3>
+Waiting for more players to join...
+</h3>

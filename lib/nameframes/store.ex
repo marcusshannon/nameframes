@@ -27,97 +27,57 @@ defmodule Nameframes.Store do
     GenServer.start_link(__MODULE__, state, name: registry(id))
   end
 
-  def update(id, state) do
-    GenServer.cast(registry(id), {:update, state})
-    broadcast_change(id, state)
-  end
-
   # client
   def cast(id, msg) do
     GenServer.cast(registry(id), msg)
+  end
+
+  def call(id, msg) do
+    GenServer.call(registry(id), msg)
   end
 
   def init(init_arg) do
     {:ok, init_arg}
   end
 
+  def send_event(id, event) do
+    GenServer.cast(registry(id), event)
+  end
+
+
+  def update(id, next_state) do
+    GenServer.cast(registry(id), {:update, next_state})
+  end
+
+  # server
   def handle_call(:get, _from, state) do
     {:reply, state, state}
   end
 
-  def handle_cast({:update, newState}, _) do
-    {:noreply, newState}
-  end
+  def handle_call({:join, player_id, player_name} = event, _from, game) do
+    case Nameframes.Games.event(game, event) do
+      {:ok, nextGame} ->
+        broadcast_change(hd(Registry.keys(Nameframes.Store.Registry, self())), nextGame)
+        {:reply, :ok, nextGame}
 
-  def handle_cast({:join, user}, state) do
-    nextState = Nameframes.Game.join_game(state, user)
-    finish_cast(nextState)
-  end
-
-  def handle_cast({:storyteller_pick, user_id, card}, state) do
-    nextState = Nameframes.Game.pick_card(state, user_id, card) |> Map.put(:state, "OTHERS_PICK")
-    finish_cast(nextState)
-  end
-
-  def handle_cast({:ready, user_id}, state) do
-    nextState =
-      Nameframes.Game.update_player(state, user_id, Map.put(state.players[user_id], :ready, true))
-
-    all_ready = Nameframes.Game.all_ready(nextState)
-
-    case all_ready do
-      true ->
-        nextState = nextState |> Nameframes.Game.next_round()
-        finish_cast(nextState)
-
-      false ->
-        finish_cast(nextState)
+      _ ->
+        {:reply, :error, game}
     end
   end
 
-  def handle_cast({:others_pick, user_id, card}, state) do
-    nextState = Nameframes.Game.pick_card(state, user_id, card)
-    all_picked = Nameframes.Game.all_picked(nextState)
+  def handle_cast({:update, next_state}, _) do
+    {:noreply, next_state}
+  end
 
-    case all_picked do
-      true ->
-        updated_state = nextState |> Map.put(:state, "VOTE")
-        finish_cast(updated_state)
+  def handle_cast(event, game) do
+    case Nameframes.Games.event(game, event) do
+      {:ok, nextGame} ->
+        broadcast_change(hd(Registry.keys(Nameframes.Store.Registry, self())), nextGame)
+        {:noreply, nextGame}
 
-      false ->
-        finish_cast(nextState)
+      _ ->
+        {:noreply, game}
     end
-  end
-
-  def handle_cast({:others_guess, user_id, card}, state) do
-    nextState = Nameframes.Game.guess_card(state, user_id, card)
-    all_guessed = Nameframes.Game.all_guessed(nextState)
-
-    case all_guessed do
-      true ->
-        updated_state =
-          nextState |> Map.put(:state, "ROUND_RESULTS") |> Nameframes.Game.score_round()
-
-        finish_cast(updated_state)
-
-      false ->
-        finish_cast(nextState)
-    end
-  end
-
-  def finish_cast(nextState) do
-    broadcast_change(hd(Registry.keys(Nameframes.Store.Registry, self())), nextState)
-    {:noreply, nextState}
-  end
-
-  def handle_cast(:start_game, state) do
-    nextState =
-      state
-      |> Map.put(:state, "STORYTELLER_PICK")
-      |> Nameframes.Game.start_game()
-
-    broadcast_change(hd(Registry.keys(Nameframes.Store.Registry, self())), nextState)
-    {:noreply, nextState}
   end
 
   def subscribe(game_id) do
