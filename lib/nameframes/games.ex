@@ -33,7 +33,7 @@ defmodule Nameframes.Games do
     |> Enum.reject(fn {player_id, _guess_list} ->
       player_id === storyteller_id
     end)
-    |> Enum.reduce(base, fn {player_id, guess_list}, acc ->
+    |> Enum.reduce(base, fn {player_id, _guess_list}, acc ->
       player_guessed_for = picks_player[game.players[player_id].guess]
       update_in(acc, [player_guessed_for], &[player_id | &1])
     end)
@@ -98,7 +98,7 @@ defmodule Nameframes.Games do
   end
 
   def player_names(game) do
-    Enum.map(game.players, fn {player_id, player} ->
+    Enum.map(game.players, fn {_player_id, player} ->
       player.name
     end)
   end
