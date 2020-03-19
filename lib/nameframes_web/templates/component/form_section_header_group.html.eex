@@ -1,0 +1,5 @@
+ <div class="px-4 sm:px-0">
+    <%= component "form_section_header.html" do %><%= assigns[:header]%><% end %>
+    <%= component "form_section_header_spacer.html" %>
+    <%= component "form_section_sub_header.html" do %><%= assigns[:sub_header] %><% end %>
+</div>

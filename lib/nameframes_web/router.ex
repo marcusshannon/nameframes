@@ -24,6 +24,8 @@ defmodule NameframesWeb.Router do
     get "/games/join", PageController, :join
     post "/games/join", PageController, :add
 
+    get "/welcome", PageController, :welcome
+
     live "/games/:id", GameLive, session: [:player_id, :player_name]
   end
 

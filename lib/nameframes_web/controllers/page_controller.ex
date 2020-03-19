@@ -4,7 +4,7 @@ defmodule NameframesWeb.PageController do
   alias Nameframes.Forms.{CreateGame, JoinGame}
 
   def index(conn, _params) do
-    render(conn, "index.html")
+    render(conn, "welcome.html")
   end
 
   def new(conn, _params) do
@@ -62,5 +62,9 @@ defmodule NameframesWeb.PageController do
       {:error, changeset} ->
         render(conn, "join.html", changeset: changeset)
     end
+  end
+
+  def welcome(conn, _params) do
+    render(conn, "form.html")
   end
 end
