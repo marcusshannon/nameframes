@@ -1,0 +1,10 @@
+<div class="md:grid md:grid-cols-3 md:gap-6">
+  <div class="md:col-span-1">
+    <%= assigns[:header] %>
+  </div>
+  <div class="md:col-span-2">
+    <%= component "form_header_fields_spacer.html" %>
+    <%= assigns[:form] %>
+  </div>
+</div>
+

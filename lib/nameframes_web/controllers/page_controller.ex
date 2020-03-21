@@ -27,6 +27,8 @@ defmodule NameframesWeb.PageController do
         |> redirect(to: Routes.live_path(conn, NameframesWeb.GameLive, create_game.game_id))
 
       {:error, changeset} ->
+        IO.inspect changeset
+
         conn
         |> render("new.html", changeset: changeset)
     end

@@ -1,0 +1,12 @@
+<%= form_for @changeset, "/games/create", fn f -> %>
+  <%= component "form_container.html" do %>
+    <%= component "form_content_container.html" do %>
+      <%= component "form_text_input_group.html", changeset: @changeset, form: f, field: :player_name, label: "Player name" %>
+    <% end %>
+    <%= component "form_action_container.html" do %>
+      <%= component "form_submit_button.html" do %>
+        Create game lobby
+      <% end %>
+    <% end %>
+  <% end %>
+<%= end %>

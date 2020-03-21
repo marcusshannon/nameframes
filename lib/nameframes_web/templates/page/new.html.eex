@@ -1,9 +1,11 @@
-<h1>New Game</h1>
-<%= form_for @changeset, "/games/create", fn f -> %>
-  <%= label f, :player_name do %>
-    Player name
-  <% end %>
-  <%= text_input f, :player_name %>
-  <%= error_tag f, :player_name %>
-  <%= submit "Start Game" %>
+<%= component "container.html" do %>
+<div class="h-10"></div>
+
+  <%= component "form_with_header_layout.html",
+        header: component("form_section_header_group.html",
+                  header: "Create Game Lobby",
+                  sub_header: "Enter your player name"),
+        form: component("games_forms_new.html", changeset: @changeset)
+  %>
+
 <% end %>
