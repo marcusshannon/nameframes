@@ -1,5 +1,5 @@
 <%= form_for @changeset, "/games/join", fn f -> %>
-  <%= component "form_container.html" do %>
+  <%= component "card_container.html" do %>
     <%= component "form_content_container.html" do %>
       <%= component "form_text_input_group.html", changeset: @changeset, form: f, field: :player_name, label: "Player name" %>
       <%= component "form_text_input_group.html", changeset: @changeset, form: f, field: :game_id, label: "Game ID" %>

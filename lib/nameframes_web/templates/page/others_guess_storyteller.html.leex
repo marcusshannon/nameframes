@@ -1,0 +1,31 @@
+<%= component "banner.html" do %>
+  Wait for the other player's to guess.
+<% end %>
+
+<div class="h-5 "></div>
+
+<%= component "container.html" do %>
+  <%= component "form_section_header_group.html", header: "Possible Cards", sub_header: "Wait for the other player's guess." %>
+  <div class="h-5"></div>
+  <%= component "card_container.html" do %>
+    <div class="flex py-4 overflow-x-auto">
+      <div class="flex-shrink-0 w-4"></div>
+      <div class="flex-shrink-0 rounded overflow-hidden">
+        <img class="rounded" src="/images/_<%= assigns[:locked_pick] %>.jpg" style="width: 233px; height: 350px; object-fit: cover;" />
+      </div>
+      <div class="flex-shrink-0 w-4"></div>
+      <div style="width: 2px" class="flex-shrink-0 bg-indigo-100 rounded-lg overflow-hidden"></div>
+      <div class="flex-shrink-0 w-4"></div>
+
+      <%= for card <- @guessable_cards do %>
+        <div class="flex-shrink-0 rounded overflow-hidden <%= if assigns[:locked_guess] === card do %>border-4 border-indigo-600 bg-indigo-600 -m-1<% end %>">
+          <img class="rounded" src="/images/_<%= card %>.jpg" style="width: 233px; height: 350px; object-fit: cover;" />
+        </div>
+        <div class="flex-shrink-0 w-4"></div>
+      <% end %>
+    </div>
+  <% end %>
+
+<%= end %>
+
+<div class="h-5"></div>

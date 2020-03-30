@@ -1,0 +1,4 @@
+ <div class="flex items-center">
+    <%= component "svg_user.html", class: "h-4 w-4 mr-1.5" %>
+    <%= @player_name %>
+</div>

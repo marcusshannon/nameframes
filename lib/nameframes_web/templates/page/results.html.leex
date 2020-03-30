@@ -1,79 +1,93 @@
-<%= if @is_storyteller do %>
-<h1>Storyteller (you)</h1>
-<h3>+<%= @game.players[@storyteller_id].round_points %>pts</h3>
-<div style="border: 1px solid; margin-bottom: 16px">
-<img src="/images/_<%= @storyteller_card %>.jpg"  style="width: 233px; height: 350px; object-fit: cover;"/>
-<h3>Players who guessed this card:</h3>
-<%= for guesser <- @storyteller_guesses do %>
-  <div><%= guesser.name %></div>
-<% end %>
-</div>
+<%= component "banner.html" do %>
+  See who guessed for your card.
 <% end %>
 
-<%= if not @is_storyteller do %>
-  <div style="border: 1px solid; margin-bottom: 16px">
-<h1>Storyteller</h1>
-<h2><%= @storyteller_name %></h2>
-<h3>+<%= @game.players[@storyteller_id].round_points %>pts</h3>
-<img src="/images/_<%= @storyteller_card %>.jpg"  style="width: 233px; height: 350px; object-fit: cover;"/>
-<h3>Players who guessed this card:</h3>
-<%= for guesser <- @storyteller_guesses do %>
-  <div><%= guesser.name %></div>
-<% end %>
-</div>
-<% end %>
+<div class="h-5 "></div>
 
-<%= if not @is_storyteller do %>
-  <div style="border: 1px solid; margin-bottom: 16px">
-  <h1>You</h1>
-  <h3>+<%= @game.players[@player_id].round_points %>pts</h3>
-  <img src="/images/_<%= @pick %>.jpg"  style="width: 233px; height: 350px; object-fit: cover;"/>
-  <h3>Players who guessed this card:</h3>
-  <%= for guesser <- @player_guesses do %>
-    <div><%= guesser.name %></div>
+<%= component "container.html" do %>
+  <%= component "form_section_header_group.html", header: "Results", sub_header: "See who voted for who" %>
+  <div class="h-2"></div>
+  <%= component "card_container.html" do %>
+    <div class="flex py-4 overflow-x-auto items-top">
+      <div class="flex-shrink-0 w-4"></div>
+      <div class="flex-shrink-0 rounded overflow-hidden flex flex-col items-center">
+        <div class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium leading-5 bg-indigo-100 text-indigo-800">
+           Storyteller (<%= @storyteller_name %>)
+        </div>
+        <div class="h-1"></div>
+        <div class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium leading-5 bg-green-100 text-green-800">
+           +<%= @game.players[@storyteller_id].round_points %>pts
+        </div>
+        <div class="h-2"></div>
+        <img class="rounded" src="/images/_<%= @storyteller_card %>.jpg" style="width: 233px; height: 350px; object-fit: cover;" />
+        <%= for guesser <- @storyteller_guesses do %>
+          <div class="h-2"></div>
+          <div class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium leading-5 bg-gray-100 text-gray-800">
+            <%= guesser.name %>
+          </div>
+        <% end %>
+
+      </div>
+      <div class="flex-shrink-0 w-4"></div>
+      <%= for other <- @display_others do %>
+        <div class="flex-shrink-0 rounded overflow-hidden flex flex-col items-center">
+          <div class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium leading-5 bg-indigo-100 text-indigo-800">
+            <%= other.name %>
+          </div>
+          <div class="h-1"></div>
+          <div class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium leading-5 bg-green-100 text-green-800">
+           +<%= other.round_points %>pts
+          </div>
+          <div class="h-2"></div>
+          <img class="rounded" src="/images/_<%= other.pick %>.jpg" style="width: 233px; height: 350px; object-fit: cover;" />
+          <%= for guesser <- other.guess_list do %>
+            <div class="h-2"></div>
+            <div class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium leading-5 bg-gray-100 text-gray-800">
+              <%= guesser.name %>
+            </div>
+          <% end %>
+        </div>
+        <div class="flex-shrink-0 w-4"></div>
+      <% end %>
+    </div>
   <% end %>
-  </div>
-<% end %>
 
-<h1>Others' cards</h1>
-<%= for other <- @display_others do %>
-  <div style="border: 1px solid; margin-bottom: 16px">
-  <h2><%= other.name %></h2>
-  <h3>+<%= other.round_points %>pts</h3>
-  <div style="margin-bottom: 16px;">
-    <img src="/images/_<%= other.pick %>.jpg"  style="width: 233px; height: 350px; object-fit: cover;"/>
-  </div> 
-  <h3>Players who guessed this card:</h3>
-  <%= for guesser <- other.guess_list do %>
-    <div><%= guesser.name %></div>
+
+<div class="h-5"></div>
+<%= component "form_section_header_group.html", header: "Leaderboard", sub_header: "See how you're doing" %>
+<div class="h-2"></div>
+<%= component "table.html" do %>
+  <%= for {player_name, points} <- @leaderboard do %>
+    <tr>
+      <%= component "table_player_data.html" do %>
+        <%= player_name %>
+      <% end %>
+      <%= component "table_score_data.html" do %>
+        <%= points %>
+      <% end %>
+    </tr>
   <% end %>
-  </div>
 <% end %>
 
-<div>
-<h1>Leaderboard</h1>
 
-<table>
-  <tr>
-    <th>Player</th>
-    <th>Points</th>
-  </tr>
-<%= for {player_name, points} <- @leaderboard do %>
-  <tr>
-    <td><%= player_name %></td>
-    <td><%= points %></td> 
-  </tr>
-<% end %>
+<div class="h-5"></div>
 
-</table>
+ <div class="px-4 sm:px-0">
 
 
 <%= if not @is_ready do %>
-<div>
-<button phx-click="ready">Ready up</button
-</div>
+  <button type="button" phx-click="ready" class="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150">
+    Ready up
+  </button>
 <% end %>
 
 <%= if @is_ready do %>
-<p>Wait for others to ready up</p>
+  <%= component "button_disabled.html" do %>
+    Wait for others to ready up
+  <% end %>
 <% end %>
+
+</div>
+<%= end %>
+
+<div class="h-5"></div>

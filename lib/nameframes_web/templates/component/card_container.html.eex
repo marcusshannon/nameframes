@@ -1,0 +1,3 @@
+<div class="bg-white overflow-hidden shadow sm:rounded-lg">
+  <%= assigns[:do] %>
+</div>

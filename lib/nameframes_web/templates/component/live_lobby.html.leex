@@ -1,0 +1,11 @@
+<%= component "container.html" do %>
+  <div class="h-10"></div>
+  <%= component "column_layout_container.html" do %>
+    <%= component "column_layout_left.html" do %>
+      <%= component "form_section_header_group.html", header: "Lobby", sub_header: "4 players required to start game" %>
+    <% end %>
+    <%= component "column_layout_right.html" do %>
+      <%= component "info_card.html", player_names: @player_names, can_start_game?: @can_start_game? %>
+    <% end %>
+  <% end %>
+<% end %>

@@ -1,7 +1,7 @@
 <% if @view === :lobby_small do %>
-    <%= live_component @socket, NameframesWeb.LobbySmallComponent, Enum.to_list(assigns) %>
+  <%= live_component @socket, NameframesWeb.LobbySmallComponent, Enum.to_list(assigns) %>
 <% end %>
 
 <% if @view === :lobby do %>
-    <%= live_component @socket, NameframesWeb.LobbyComponent, Enum.to_list(assigns) %>
+  <%= live_component @socket, NameframesWeb.LobbyComponent, Enum.to_list(assigns) %>
 <% end %>

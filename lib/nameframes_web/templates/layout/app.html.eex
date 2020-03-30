@@ -4,9 +4,8 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Nameframes</title>
+    <title>nameframes</title>
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
-    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
   </head>
   <body class="bg-gray-50">
     <%= render @view_module, @view_template, assigns %>

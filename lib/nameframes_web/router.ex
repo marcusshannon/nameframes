@@ -18,16 +18,15 @@ defmodule NameframesWeb.Router do
   scope "/", NameframesWeb do
     pipe_through :browser
 
-    live "/", IndexLive
+    get "/", PageController, :index
 
     get "/games/new", PageController, :new
     post "/games/create", PageController, :create
+
     get "/games/join", PageController, :join
     post "/games/join", PageController, :add
 
-    get "/welcome", PageController, :welcome
-
-    live "/games/:id", GameLive, session: [:player_id, :player_name]
+    get "/games/:id", PageController, :game
   end
 
   # Other scopes may use custom stacks.

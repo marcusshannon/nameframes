@@ -2,9 +2,7 @@
 <div class="h-10"></div>
 
   <%= component "form_with_header_layout.html",
-        header: component("form_section_header_group.html",
-                  header: "Join Game Lobby",
-                  sub_header: "Enter your player name and the game identifier"),
+        header: component("form_section_header_group.html", header: "Join Game Lobby", sub_header: "Enter your player name and the game identifier"),
         form: component("games_forms_join.html", changeset: @changeset)
   %>
 
