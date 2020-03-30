@@ -378,7 +378,7 @@ defmodule Nameframes.Games do
     updated_game = put_in(game, [:players, player_id], Players.new_player(player_id, player_name))
     number_of_players = map_size(updated_game.players)
 
-    case number_of_players > 1 do
+    case number_of_players > 3 do
       true ->
         {:ok, put_in(updated_game, [:status], :lobby)}
 
