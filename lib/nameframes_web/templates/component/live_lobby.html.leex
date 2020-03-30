@@ -5,7 +5,7 @@
       <%= component "form_section_header_group.html", header: "Lobby", sub_header: "4 players required to start game" %>
     <% end %>
     <%= component "column_layout_right.html" do %>
-      <%= component "info_card.html", player_names: @player_names, can_start_game?: @can_start_game? %>
+      <%= component "info_card.html", player_names: @player_names, can_start_game?: @can_start_game?, game_id: @game_id, host_name: @host_name %>
     <% end %>
   <% end %>
 <% end %>

@@ -8,7 +8,7 @@
         <% end %>
         <%= component "description_details.html" do %>
           <%= component "description_term_details_spacer.html" %>
-          6969
+          <%= @game_id %>
         <% end %>
       <% end %>
 
@@ -19,13 +19,7 @@
         <% end %>
         <%= component "description_details.html" do %>
           <%= component "description_term_details_spacer.html" %>
-          <ul>
-            <%= for {player_name, i} <- Enum.with_index(@player_names) do %>
-              <%= if i == 0 do %>
-                <li><%= player_name %></li>
-              <% end %>
-          <% end %>
-          </ul>
+          <%= @host_name %>
         <% end %>
       <% end %>
 
