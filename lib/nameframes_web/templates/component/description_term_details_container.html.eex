@@ -1,0 +1,3 @@
+<div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+  <%= assigns[:do] %>
+</div>

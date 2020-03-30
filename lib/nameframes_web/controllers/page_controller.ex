@@ -1,5 +1,7 @@
 defmodule NameframesWeb.PageController do
   use NameframesWeb, :controller
+  import Phoenix.LiveView.Controller
+
   alias Nameframes.Forms
   alias Nameframes.Forms.{CreateGame, JoinGame}
 
@@ -16,17 +18,20 @@ defmodule NameframesWeb.PageController do
     case Forms.create_game(create_game_params) do
       {:ok, create_game} ->
         game_id = create_game.game_id
-        player_id = Ecto.UUID.generate()
         player_name = create_game.player_name
 
-        Nameframes.Store.new(game_id, Nameframes.Games.new_game(player_id, player_name))
+        Nameframes.Store.new(
+          game_id,
+          Nameframes.Games.new_game(conn.assigns.fingerprint, player_name)
+        )
 
         conn
-        |> put_session(:player_id, player_id)
-        |> put_session(:player_name, player_name)
-        |> redirect(to: Routes.live_path(conn, NameframesWeb.GameLive, create_game.game_id))
+        |> put_session(:player_id, conn.assigns.fingerprint)
+        |> redirect(to: "/games/#{create_game.game_id}")
 
       {:error, changeset} ->
+        IO.inspect(changeset)
+
         conn
         |> render("new.html", changeset: changeset)
     end
@@ -41,15 +46,12 @@ defmodule NameframesWeb.PageController do
     case Forms.join_game(join_game_params) do
       {:ok, join_game} ->
         game_id = join_game.game_id
-        player_id = Ecto.UUID.generate()
+
         player_name = join_game.player_name
 
-        case Nameframes.Store.call(game_id, {:join, player_id, player_name}) do
+        case Nameframes.Store.call(game_id, {:join, conn.assigns.fingerprint, player_name}) do
           :ok ->
-            conn
-            |> put_session(:player_id, player_id)
-            |> put_session(:player_name, player_name)
-            |> redirect(to: Routes.live_path(conn, NameframesWeb.GameLive, join_game.game_id))
+            redirect(conn, to: "/games/#{join_game.game_id}")
 
           :error ->
             changeset = Forms.change_join_game(join_game)
@@ -62,5 +64,11 @@ defmodule NameframesWeb.PageController do
       {:error, changeset} ->
         render(conn, "join.html", changeset: changeset)
     end
+  end
+
+  def game(conn, %{"id" => id}) do
+    live_render(conn, NameframesWeb.GameLive,
+      session: %{fingerprint: conn.assigns.fingerprint, game_id: id}
+    )
   end
 end

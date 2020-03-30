@@ -1,0 +1,39 @@
+<%= component "banner.html" do %>
+  You are the storyteller. Select a card and give a clue that's not too specific or too broad.
+<% end %>
+
+<div class="h-5 "></div>
+
+<%= component "container.html" do %>
+  <%= component "form_section_header_group.html", header: "Your hand", sub_header: "6 unique cards" %>
+  <div class="h-5"></div>
+  <%= component "card_container.html" do %>
+    <div class="flex py-4 overflow-x-auto">
+      <div class="flex-shrink-0 w-4"></div>
+      <%= for card <- @hand do %>
+        <div phx-click="pick" phx-value-card=<%= card %> class="flex-shrink-0 rounded overflow-hidden <%= if assigns[:pick] === card do %>border-4 border-indigo-600 bg-indigo-600 -m-1<% end %>">
+          <img class="rounded" src="/images/_<%= card %>.jpg" style="width: 233px; height: 350px; object-fit: cover;" />
+        </div>
+        <div class="flex-shrink-0 w-4"></div>
+      <% end %>
+    </div>
+
+    <%= if not is_nil(assigns[:pick]) do %>
+      <%= component "form_action_container.html" do %>
+        <%= component "form_submit_button.html", markup: "phx-click=\"confirm_pick\"" do %>
+          Select card
+        <% end %>
+      <% end %>
+    <% else %>
+      <%= component "form_action_container.html" do %>
+        <%= component "button_disabled.html" do %>
+          Select card
+        <% end %>
+      <% end %>
+    <% end %>
+
+  <% end %>
+
+<%= end %>
+
+<div class="h-5"></div>

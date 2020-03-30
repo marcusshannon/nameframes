@@ -1,0 +1,8 @@
+<div class="mt-1 relative rounded-md shadow-sm">
+  <%= text_input assigns[:form], assigns[:field], class: "form-input block w-full pr-10 border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:shadow-outline-red sm:text-sm sm:leading-5" %>
+  <%= component "form_text_input_icon_container.html" do %>
+    <%= component "svg_exclamation.html" %>
+  <% end %>
+</div>
+<p class="mt-2 text-sm text-red-600"><%= error_tag assigns[:form], assigns[:field] %></p>
+

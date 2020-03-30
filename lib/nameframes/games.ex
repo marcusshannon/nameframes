@@ -33,7 +33,7 @@ defmodule Nameframes.Games do
     |> Enum.reject(fn {player_id, _guess_list} ->
       player_id === storyteller_id
     end)
-    |> Enum.reduce(base, fn {player_id, guess_list}, acc ->
+    |> Enum.reduce(base, fn {player_id, _guess_list}, acc ->
       player_guessed_for = picks_player[game.players[player_id].guess]
       update_in(acc, [player_guessed_for], &[player_id | &1])
     end)
@@ -58,13 +58,13 @@ defmodule Nameframes.Games do
     end)
   end
 
-  def display_others(game, player_id) do
+  def display_others(game) do
     storyteller_id = get_storyteller_id(game)
     player_guesses = player_guesses(game)
 
     game.display_order
     |> Enum.reject(fn id ->
-      id === storyteller_id or player_id === id
+      id === storyteller_id
     end)
     |> Enum.map(fn id ->
       %{
@@ -98,7 +98,7 @@ defmodule Nameframes.Games do
   end
 
   def player_names(game) do
-    Enum.map(game.players, fn {player_id, player} ->
+    Enum.map(game.players, fn {_player_id, player} ->
       player.name
     end)
   end
@@ -378,7 +378,7 @@ defmodule Nameframes.Games do
     updated_game = put_in(game, [:players, player_id], Players.new_player(player_id, player_name))
     number_of_players = map_size(updated_game.players)
 
-    case number_of_players > 2 do
+    case number_of_players > 1 do
       true ->
         {:ok, put_in(updated_game, [:status], :lobby)}
 

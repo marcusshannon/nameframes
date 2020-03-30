@@ -2,52 +2,42 @@ defmodule NameframesWeb.GameLive do
   use Phoenix.LiveView
 
   def render(assigns) do
-    case assigns.game.status do
+    # this is where you should get all your derived data
+    # or inside the component, which makes sense to compartmentalize the deriving
+    assigns = [component: get_component(assigns)] ++ Enum.to_list(assigns)
+    Phoenix.View.render(NameframesWeb.PageView, "component.html", assigns)
+  end
+
+  def get_component(state) do
+    case state.game.status do
       :lobby_small ->
-        ~L"""
-        <%= live_component @socket, NameframesWeb.LobbySmallComponent, Enum.to_list(assigns) %>
-        """
+        NameframesWeb.LobbyComponent
 
       :lobby ->
-        ~L"""
-        <%= live_component @socket, NameframesWeb.LobbyComponent, Enum.to_list(assigns) %>
-        """
+        NameframesWeb.LobbyComponent
 
       :storyteller_pick ->
-        ~L"""
-        <%= live_component @socket, NameframesWeb.StorytellerPickComponent, Enum.to_list(assigns) %>
-        """
+        NameframesWeb.StorytellerPickComponent
 
       :others_pick ->
-        ~L"""
-        <%= live_component @socket, NameframesWeb.OthersPickComponent, Enum.to_list(assigns) %>
-        """
+        NameframesWeb.OthersPickComponent
 
       :others_guess ->
-        ~L"""
-        <%= live_component @socket, NameframesWeb.OthersGuessComponent, Enum.to_list(assigns) %>
-        """
+        NameframesWeb.OthersGuessComponent
 
       :results ->
-        ~L"""
-        <%= live_component @socket, NameframesWeb.ResultsComponent, Enum.to_list(assigns) %>
-        """
+        NameframesWeb.ResultsComponent
     end
   end
 
   def mount(session, socket) do
-    {:ok,
-     socket
-     |> assign(:player_id, session.player_id)
-     |> assign(:nonce, Ecto.UUID.generate())}
-  end
-
-  def handle_params(%{"id" => game_id}, _uri, socket) do
+    game_id = session.game_id
     game = Nameframes.Store.get(game_id)
     Nameframes.Store.subscribe(game_id)
 
-    {:noreply,
+    {:ok,
      socket
+     |> assign(:player_id, session.fingerprint)
      |> assign(:game_id, game_id)
      |> assign(:game, game)
      |> assign(:view, get_view(game))}
@@ -56,8 +46,7 @@ defmodule NameframesWeb.GameLive do
   def handle_info(game, socket) do
     {:noreply,
      socket
-     |> assign(:game, game)
-     |> assign(:nonce, Ecto.UUID.generate())}
+     |> assign(:game, game)}
   end
 
   def get_view(game) do
@@ -65,7 +54,6 @@ defmodule NameframesWeb.GameLive do
   end
 
   # Event handlers
-
   def handle_event("start", _value, socket) do
     Nameframes.Store.send_event(socket.assigns.game_id, {:start, socket.assigns.player_id})
 
@@ -75,24 +63,35 @@ defmodule NameframesWeb.GameLive do
   def handle_event("pick", %{"card" => card}, socket) do
     {card, _} = Integer.parse(card)
 
+    {:noreply,
+     socket
+     |> assign(:pick, card)}
+  end
+
+  def handle_event("confirm_pick", _, socket) do
     Nameframes.Store.send_event(
       socket.assigns.game_id,
-      {:pick, socket.assigns.player_id, card}
+      {:pick, socket.assigns.player_id, socket.assigns.pick}
     )
 
-    {:noreply, socket}
+    {:noreply,
+     socket
+     |> assign(:pick, nil)}
   end
 
   def handle_event("guess", %{"card" => card}, socket) do
     {card, _} = Integer.parse(card)
 
-    res =
-      Nameframes.Store.send_event(
-        socket.assigns.game_id,
-        {:guess, socket.assigns.player_id, card}
-      )
+    {:noreply, socket |> assign(:guess, card)}
+  end
 
-    {:noreply, socket}
+  def handle_event("confirm_guess", _, socket) do
+    Nameframes.Store.send_event(
+      socket.assigns.game_id,
+      {:guess, socket.assigns.player_id, socket.assigns.guess}
+    )
+
+    {:noreply, socket |> assign(:guess, nil)}
   end
 
   def handle_event("ready", _value, socket) do

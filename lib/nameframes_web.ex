@@ -43,6 +43,7 @@ defmodule NameframesWeb do
 
       import NameframesWeb.ErrorHelpers
       import NameframesWeb.Gettext
+      import NameframesWeb.ComponentHelpers
       alias NameframesWeb.Router.Helpers, as: Routes
 
       import Phoenix.LiveView,

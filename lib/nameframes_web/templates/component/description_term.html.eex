@@ -1,0 +1,3 @@
+<dt class="text-sm leading-5 font-medium text-gray-500">
+  <%= assigns[:do] %>
+</dt>

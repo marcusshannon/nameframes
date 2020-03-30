@@ -1,0 +1,66 @@
+<%= component "card_container.html" do %>
+  <%= component "card_data_container.html" do %>
+    <dl>
+
+      <%= component "description_term_details_container.html" do %>
+        <%= component "description_term.html" do %>
+          Game ID
+        <% end %>
+        <%= component "description_details.html" do %>
+          <%= component "description_term_details_spacer.html" %>
+          6969
+        <% end %>
+      <% end %>
+
+      <%= component "description_spacer.html" %>
+      <%= component "description_term_details_container.html" do %>
+        <%= component "description_term.html" do %>
+          Host
+        <% end %>
+        <%= component "description_details.html" do %>
+          <%= component "description_term_details_spacer.html" %>
+          <ul>
+            <%= for {player_name, i} <- Enum.with_index(@player_names) do %>
+              <%= if i == 0 do %>
+                <li><%= player_name %></li>
+              <% end %>
+          <% end %>
+          </ul>
+        <% end %>
+      <% end %>
+
+      <%= component "description_spacer.html" %>
+      <%= component "description_term_details_container.html" do %>
+        <%= component "description_term.html" do %>
+          Players
+        <% end %>
+        <%= component "description_details.html" do %>
+          <%= component "description_term_details_spacer.html" %>
+          <ul>
+            <%= for {player_name, i} <- Enum.with_index(@player_names) do %>
+              <%= if i == 0 do %>
+                <li><%= player_name %></li>
+              <% else %>
+                <div class="h-2"></div>
+                <li><%= player_name %></li>
+              <% end %>
+          <% end %>
+          </ul>
+        <% end %>
+      <% end %>
+
+    </dl>
+
+  <% end %>
+
+  <%= if @can_start_game? do %>
+
+  <%= component "form_action_container.html" do %>
+    <%= component "form_submit_button.html", markup: "phx-click=\"start\"" do %>
+      Start game
+    <% end %>
+  <% end %>
+
+  <% end %>
+
+<% end %>

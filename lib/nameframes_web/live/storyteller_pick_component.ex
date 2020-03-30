@@ -3,7 +3,11 @@ defmodule NameframesWeb.StorytellerPickComponent do
   alias Nameframes.Games
 
   def render(assigns) do
-    Phoenix.View.render(NameframesWeb.PageView, "storyteller_pick.html", assigns)
+    if assigns.is_storyteller do
+      Phoenix.View.render(NameframesWeb.PageView, "storyteller_pick_storyteller.html", assigns)
+    else
+      Phoenix.View.render(NameframesWeb.PageView, "storyteller_pick_other.html", assigns)
+    end
   end
 
   def update(assigns, socket) do
@@ -16,6 +20,7 @@ defmodule NameframesWeb.StorytellerPickComponent do
      |> assign(:player_names, player_names)
      |> assign(:is_host, is_host)
      |> assign(:hand, assigns.game.players[assigns.player_id].hand)
-     |> assign(:is_storyteller, is_storyteller)}
+     |> assign(:is_storyteller, is_storyteller)
+     |> assign(:pick, assigns[:pick])}
   end
 end

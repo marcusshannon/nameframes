@@ -1,0 +1,5 @@
+<div class="md:col-span-2">
+  <div class="h-5 md:h-0"></div>
+  <%= assigns[:do] %>
+</div>
+

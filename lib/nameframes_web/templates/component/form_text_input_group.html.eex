@@ -1,0 +1,11 @@
+<%= component "form_text_input_container.html" do %>
+  <%= component "form_label.html", form: assigns[:form], field: assigns[:field] do %>
+   <%= assigns[:label] %>
+  <% end %>
+
+  <%= if not is_nil(@changeset.action) and Keyword.has_key?(@changeset.errors, assigns[:field]) do %>
+    <%= component "form_text_input_error.html", form: assigns[:form], field: assigns[:field] %>
+  <% else %>
+    <%= component "form_text_input.html", form: assigns[:form], field: assigns[:field] %>
+  <% end %>
+<% end %>

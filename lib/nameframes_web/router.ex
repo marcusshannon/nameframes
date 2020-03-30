@@ -7,6 +7,7 @@ defmodule NameframesWeb.Router do
     plug :fetch_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug NameframesWeb.Plugs.Fingerprint
     plug Phoenix.LiveView.Flash
   end
 
@@ -17,14 +18,15 @@ defmodule NameframesWeb.Router do
   scope "/", NameframesWeb do
     pipe_through :browser
 
-    live "/", IndexLive
+    get "/", PageController, :index
 
     get "/games/new", PageController, :new
     post "/games/create", PageController, :create
+
     get "/games/join", PageController, :join
     post "/games/join", PageController, :add
 
-    live "/games/:id", GameLive, session: [:player_id, :player_name]
+    get "/games/:id", PageController, :game
   end
 
   # Other scopes may use custom stacks.

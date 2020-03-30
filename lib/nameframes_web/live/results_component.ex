@@ -16,12 +16,11 @@ defmodule NameframesWeb.ResultsComponent do
     can_guess = not is_storyteller and not has_guessed
     guessable_cards = Games.guessable_cards(assigns.game, assigns.player_id)
 
-    display_others = Games.display_others(assigns.game, assigns.player_id)
+    display_others = Games.display_others(assigns.game)
     storyteller_guesses = Games.storyteller_guesses(assigns.game)
 
     player_guesses = Games.guesses_for_player(assigns.game, assigns.player_id)
     leaderboard = Games.leaderboard(assigns.game)
-
 
     {:ok,
      socket
