@@ -3,7 +3,10 @@
   "license": "MIT",
   "scripts": {
     "build-js": "npx parcel build ./js/app.js -d ../priv/static/js/ --public-url /js",
-    "build-css": "npx tailwindcss build ./css/app.css -o ../priv/static/css/app.css"
+    "build-css": "npx tailwindcss build ./css/app.css -o ../priv/static/css/app.css",
+    "purge-css": "npx purgecss --css ../priv/static/css/app.css --content ../lib/**/*.eex ../lib/**/*.leex --output ../priv/static/css/ --config ./purgecss.config.js",
+    "clean-css": "npx cleancss -o ../priv/static/css/app.css ../priv/static/css/app.css",
+    "prod-deploy-css": "npm run build-css && npm run purge-css && npm run clean-css"
   },
   "dependencies": {
     "phoenix": "file:../deps/phoenix",
@@ -12,7 +15,9 @@
   },
   "devDependencies": {
     "@tailwindcss/ui": "^0.1.3",
+    "clean-css-cli": "^4.3.0",
     "parcel-bundler": "^1.12.4",
+    "purgecss": "^2.1.0",
     "tailwindcss": "^1.2.0"
   }
 }
