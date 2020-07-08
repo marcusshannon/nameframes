@@ -14,11 +14,9 @@ config :nameframes,
 config :nameframes, NameframesWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "Ofi+Fg1eTalAE28rm9ZDy/Zvgma7Kw/tmOHVTZh5zt0w+AroXn0xUSlS5VPJG6cA",
-  render_errors: [view: NameframesWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Nameframes.PubSub, adapter: Phoenix.PubSub.PG2],
-  live_view: [
-    signing_salt: "n+lhHPAKKjvyMWjhQp2skY7ah5IeDrZb"
-  ]
+  render_errors: [view: NameframesWeb.ErrorView, accepts: ~w(html json), layout: false],
+  pubsub_server: Nameframes.PubSub,
+  live_view: [signing_salt: "n+lhHPAKKjvyMWjhQp2skY7ah5IeDrZb"]
 
 # Configures Elixir's Logger
 config :logger, :console,

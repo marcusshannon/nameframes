@@ -54,7 +54,7 @@ defmodule Nameframes.Store do
     {:reply, state, state}
   end
 
-  def handle_call({:join, player_id, player_name} = event, _from, game) do
+  def handle_call({:join, _player_id, _player_name} = event, _from, game) do
     case Nameframes.Games.event(game, event) do
       {:ok, nextGame} ->
         broadcast_change(hd(Registry.keys(Nameframes.Store.Registry, self())), nextGame)

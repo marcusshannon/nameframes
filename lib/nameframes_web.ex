@@ -17,15 +17,14 @@ defmodule NameframesWeb do
   and import those modules here.
   """
 
+
   def controller do
     quote do
       use Phoenix.Controller, namespace: NameframesWeb
 
       import Plug.Conn
       import NameframesWeb.Gettext
-
       alias NameframesWeb.Router.Helpers, as: Routes
-      import Phoenix.LiveView.Controller
     end
   end
 
@@ -36,32 +35,35 @@ defmodule NameframesWeb do
         namespace: NameframesWeb
 
       # Import convenience functions from controllers
-      import Phoenix.Controller, only: [get_flash: 1, get_flash: 2, view_module: 1]
+      import Phoenix.Controller,
+        only: [get_flash: 1, get_flash: 2, view_module: 1, view_template: 1]
 
-      # Use all HTML functionality (forms, tags, etc)
-      use Phoenix.HTML
+      # Include shared imports and aliases for views
+      unquote(view_helpers())
+    end
+  end
 
-      import NameframesWeb.ErrorHelpers
-      import NameframesWeb.Gettext
-      import NameframesWeb.ComponentHelpers
-      alias NameframesWeb.Router.Helpers, as: Routes
+  def live_view do
+    quote do
+      use Phoenix.LiveView,
+        layout: {NameframesWeb.LayoutView, "live.html"}
 
-      import Phoenix.LiveView,
-        only: [
-          live_render: 2,
-          live_render: 3,
-          live_link: 1,
-          live_link: 2,
-          live_component: 2,
-          live_component: 3,
-          live_component: 4
-        ]
+      unquote(view_helpers())
+    end
+  end
+
+  def live_component do
+    quote do
+      use Phoenix.LiveComponent
+      page_view.ex
+      unquote(view_helpers())
     end
   end
 
   def router do
     quote do
       use Phoenix.Router
+
       import Plug.Conn
       import Phoenix.Controller
       import Phoenix.LiveView.Router
@@ -72,6 +74,25 @@ defmodule NameframesWeb do
     quote do
       use Phoenix.Channel
       import NameframesWeb.Gettext
+    end
+  end
+
+  defp view_helpers do
+    quote do
+      # Use all HTML functionality (forms, tags, etc)
+      use Phoenix.HTML
+
+      # Import LiveView helpers (live_render, live_component, live_patch, etc)
+      import Phoenix.LiveView.Helpers
+
+      # Import basic rendering functionality (render, render_layout, etc)
+      import Phoenix.View
+
+      import NameframesWeb.ComponentHelpers
+
+      import NameframesWeb.ErrorHelpers
+      import NameframesWeb.Gettext
+      alias NameframesWeb.Router.Helpers, as: Routes
     end
   end
 

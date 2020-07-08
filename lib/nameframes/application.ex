@@ -6,10 +6,13 @@ defmodule Nameframes.Application do
   use Application
 
   def start(_type, _args) do
-    # List all child processes to be supervised
     children = [
       # Start the Ecto repository
       # Nameframes.Repo,
+      # Start the Telemetry supervisor
+      NameframesWeb.Telemetry,
+      # Start the PubSub system
+      {Phoenix.PubSub, name: Nameframes.PubSub},
       # Start the endpoint when the application starts
       NameframesWeb.Endpoint,
       # Starts a worker by calling: Nameframes.Worker.start_link(arg)

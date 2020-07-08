@@ -8,7 +8,7 @@ defmodule Nameframes.Players do
       pick: nil,
       guess: nil,
       ready: false,
-      round_points: 0,
+      round_points: 0
     }
   end
 
